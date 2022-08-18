@@ -9,5 +9,5 @@ namespace Reversi.Core;
 public interface IInteractor {
     string Name { get; }
 
-    Task<Position> InputAsync(Board board, Piece tuen);
+    Task<Position> InputAsync(Board board, Piece turn);
 }

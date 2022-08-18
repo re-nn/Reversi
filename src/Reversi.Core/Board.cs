@@ -1,4 +1,6 @@
-﻿namespace Reversi.Core;
+﻿using System.Collections.Immutable;
+
+namespace Reversi.Core;
 
 public enum Piece {
     Empty,
@@ -25,7 +27,7 @@ public struct Cell {
 }
 
 public class Board {
-    const int Length = 8;
+    public const int Length = 8;
 
     Cell[] cells = new Cell[Length * Length];
 
@@ -52,11 +54,8 @@ public class Board {
 
     }
 
-    public void ClearCells() {
-        this.cells = new Cell[Length * Length];
-    }
-
     public void InitAndReadyCells() {
+        this.cells = new Cell[Length * Length];
         int center = Length / 2;
         this[center - 1, center - 1] = new(Piece.White);
         this[center - 1, center] = new(Piece.Black);
@@ -68,6 +67,17 @@ public class Board {
 
     public bool IsEmptyCell(Position position) => this[position] is { Piece: Piece.Empty };
 
+    public bool CanPlaceAnywhere(Piece turn) {
+        for (int y = 0; y < Length; y++) {
+            for (int x = 0; x < Length; x++) {
+                if(this.CanPlace(new Position(x, y), turn)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     public bool CanPlace(Position position, Piece turn) {
         var toggledTurn = new Cell(turn).Toggle().Piece;
